@@ -1,11 +1,48 @@
-/*
- * este es un comentario muy largo
- * que toma mas de una linea en el
- * texto
- */
 fun main(args: Array<String>) {
+    println(birthdayGreeting(age = 5)) // se activa el valor por default de name al no enviar valor
+    println(birthdayGreeting(name = "Rex", age = 3 ))
+}
 
-    
+fun birthdayGreeting(name: String = "Rover", age: Int): String { // name tiene un valor por default
+    val nameGreeting = "Happy Birthday, $name!"
+    val ageGreeting = "You are now $age years old!"
+    return "$nameGreeting\n$ageGreeting"
+}
+
+//fun main(args: Array<String>) {
+//    println(birthdayGreeting("Rover", 5))
+//    println(birthdayGreeting(name = "Rex", age = 3 )) // argumentos con nombre en la llamada a la funcion
+//}
+//
+//fun birthdayGreeting(name: String, age: Int): String {
+//    val nameGreeting = "Happy Birthday, $name!"
+//    val ageGreeting = "You are now $age years old!"
+//    return "$nameGreeting\n$ageGreeting"
+//}
+
+///*
+// * este es un comentario muy largo
+// * que toma mas de una linea en el
+// * texto
+// */
+//fun main(args: Array<String>) {
+//    println(birthdayGreeting("Rover", 5))
+//    println(birthdayGreeting("Rex", 3 ))
+////    println(birthdayGreeting("Rover"))
+////    println(birthdayGreeting("Rex"))
+//}
+//
+//fun birthdayGreeting(name: String, age: Int): String {
+//    val nameGreeting = "Happy Birthday, $name!"
+//    val ageGreeting = "You are now $age years old!"
+//    return "$nameGreeting\n$ageGreeting"
+//}
+
+//fun birthdayGreeting(): String {
+//    val nameGreeting = "Happy Birthday, Rover!"
+//    val ageGreeting = "You are now 5 years old!"
+//    return "$nameGreeting\n$ageGreeting"
+//}
 
 //    // Create a variable for the number of unread messages.
 //    var count = 10
@@ -58,5 +95,3 @@ fun main(args: Array<String>) {
 //    println("Hello Ivan!")
 //    println(5 + 8)
 //    println("45" + "72")
-
-}
