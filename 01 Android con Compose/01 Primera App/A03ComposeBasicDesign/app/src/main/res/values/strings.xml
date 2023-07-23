@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">A03ComposeBasicDesign</string>
+    <string name="happy_birthday_text">Happy Birthday Lucia!</string>
+    <string name="from_text">- from Ivan</string>
 </resources>
