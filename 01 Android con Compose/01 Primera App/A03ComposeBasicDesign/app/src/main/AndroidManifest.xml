@@ -13,15 +13,22 @@
         android:theme="@style/Theme.A03ComposeBasicDesign"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".Excercise01ComposeArticle"
             android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.A03ComposeBasicDesign">
+            android:label="@string/title_activity_excercise01_compose_article"
+            android:theme="@style/Theme.A03ComposeBasicDesign" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.A03ComposeBasicDesign">
+
         </activity>
     </application>
 
