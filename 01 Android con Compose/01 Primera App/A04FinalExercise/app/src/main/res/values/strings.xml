@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">A04FinalExercise</string>
+    <string name="full_name_card">Ivan Molero Delgado</string>
+    <string name="title_card">Ingeniero de Sistemas</string>
+    <string name="phone_number_card">+51 976 361 536</string>
+    <string name="nick_name_card">\@imolero</string>
+    <string name="email_card">imolerod@gmail.com</string>
+</resources>
