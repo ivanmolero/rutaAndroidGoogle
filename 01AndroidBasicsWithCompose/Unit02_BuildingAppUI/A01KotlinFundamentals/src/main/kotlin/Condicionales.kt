@@ -1,9 +1,63 @@
 
 /*
  * Ejemplo sobre el uso de when, curso de ANDROID BASICS WITH COMPOSE
+ * es posible hacer algo similar a lo anterior pero por medio del uso
+ * de when, en lo personal lo encuentro más simple de leer que el hecho
+ * con else if, además estos dos ejemplos son el motivo por el que Kotlin
+ * no implementa el operador terceario de Java.
  * */
 fun main(args: Array<String>) {
+    val trafficLightColor = "Amber"
+
+    val message =
+    when (trafficLightColor) {
+        "Red" -> "Stop"
+        "Yellow", "Amber" -> "Slow"
+        "Green" -> "Go"
+        else -> "Invalid traffic-light color"
+    }
+
+    println(message)
 }
+
+///*
+// * Ejemplo sobre el uso de when, curso de ANDROID BASICS WITH COMPOSE
+// * asignando la salida del if a una variable, en este caso message, es
+// * posible tener los diferentes string asignados a la variable segun la
+// * evaluación realizada por los diferentes if o el else, luego se
+// * hace un solo println a message
+// * */
+//fun main(args: Array<String>) {
+//    val trafficLightColor = "Red"
+//
+//    val message =
+//        if (trafficLightColor == "Red") "Stop"
+//        else if (trafficLightColor == "Yellow") "Slow"
+//        else if (trafficLightColor == "Green") "Go"
+//        else "Invalid traffic-light color"
+//
+//    println(message)
+//}
+
+///*
+// * Ejemplo sobre el uso de when, curso de ANDROID BASICS WITH COMPOSE
+// * al inicio existen muchos valores println en la estructura else if
+// * esto puede ser redundante y es posible simplificarlo con la asignación
+// * de valor desde el if, esto es usarlo como una expresion
+// * */
+//fun main(args: Array<String>) {
+//    val trafficLightColor = "Black"
+//
+//    if (trafficLightColor == "Red") {
+//        println("Stop")
+//    } else if (trafficLightColor == "Yellow") {
+//        println("Slow")
+//    } else if (trafficLightColor == "Green") {
+//        println("Go")
+//    } else {
+//        println("Invalid traffic-light color")
+//    }
+//}
 
 ///*
 // * Ejemplo sobre el uso de when, curso de ANDROID BASICS WITH COMPOSE
