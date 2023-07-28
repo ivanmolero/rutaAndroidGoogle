@@ -1,23 +1,65 @@
+
 /*
  * Ejemplo sobre el uso de clases, curso de ANDROID BASICS WITH COMPOSE
- * HERENCIA, es posible generar otras clases usando como base la clase
- * definida (SmartDevice) para tener un smart TV, o una smart light
- * toda clase creada es una clase inmutable, es decir, es una clase tipo
- * final, para poder extender una clase es necesario indicarlo con la
- * palabra reservada open
- * en el cuerpo de la nueva clase es posible definir propiedades de esta
- * clase (speakerVolume) que no esten presentes en la clase padre
- * (SmartDevice)
- * además es posible definir más propiedades y metodos para ser usados por
- * los objetos instanciados de esta clase
- * relaciones es-un, tanto SmartTVDevice como SmartLightDevice 'son' del
- * tipo SmartDevice, lo contrario no es posible afirmarlo, esta condición
- * debe ser satisfecha y no se debe usar herencia sólo para reutilizar
- * código
+ * tambien es posible sobreescribir una variable definida en el padre,
+ * para ello es necesario abrirla con 'open'
+ * por ejemplo, creamos una variable en el padre
+ *     open val deviceType = "unknown"
+ * y ahora la usamos desde los hijos sobreescribiendola
+ *     override val deviceType = "Smart TV"
+ *     override val deviceType = "Smart Light"
+ * cada linea en su respectiva clase, en SmartTvDevice y en SmartLightDevice
  */
+
+fun main() {
+    var smartDevice: SmartDevice = SmartTvDevice("Android TV", "Entertainment")
+    smartDevice.turnOn()
+
+    smartDevice = SmartLightDevice("Google Light", "Utility")
+    smartDevice.turnOn()
+}
+
+class SmartHome(
+    val smartTvDevice: SmartTvDevice,
+    val smartLightDevice: SmartLightDevice
+) {
+    fun turnOnTv() {
+        smartTvDevice.turnOn()
+    }
+
+    fun turnOffTv() {
+        smartTvDevice.turnOff()
+    }
+
+    fun increaseTvVolume() {
+        smartTvDevice.increaseSpeakerVolume()
+    }
+
+    fun changeTvChannelToNext() {
+        smartTvDevice.nextChannel()
+    }
+
+    fun turnOnLight() {
+        smartLightDevice.turnOn()
+    }
+
+    fun turnOffLight() {
+        smartLightDevice.turnOff()
+    }
+
+    fun increaseLightBrightness() {
+        smartLightDevice.increaseBrightness()
+    }
+
+    fun turnOffAllDevices() {
+        smartLightDevice.turnOff()
+        smartTvDevice.turnOff()
+    }
+}
 
 class SmartLightDevice(deviceName: String, deviceCategory: String) :
     SmartDevice(name = deviceName, category = deviceCategory) {
+    override val deviceType = "Smart Light"
     var brightnessLevel = 0
         set(value) {
             if (value in 0..100) {
@@ -25,14 +67,27 @@ class SmartLightDevice(deviceName: String, deviceCategory: String) :
             }
         }
 
+    override fun turnOn() {
+        super.turnOn()
+        brightnessLevel = 2
+        println("$name turned on. The brightness level is $brightnessLevel")
+    }
+
+    override fun turnOff() {
+        super.turnOff()
+        brightnessLevel = 0
+        println("$name turned off.")
+    }
+
     fun increaseBrightness() {
         brightnessLevel++
         println("Brightness increase to $brightnessLevel")
     }
 }
 
-class SmartTVDevice(deviceName: String, deviceCategory: String) :
+class SmartTvDevice(deviceName: String, deviceCategory: String) :
     SmartDevice(name = deviceName, category = deviceCategory) {
+    override val deviceType = "Smart TV"
     var speakerVolume = 2
         set(value) {
             if (value in 0..100) {
@@ -45,6 +100,17 @@ class SmartTVDevice(deviceName: String, deviceCategory: String) :
                 field = value
             }
         }
+
+    override fun turnOn() {
+        super.turnOn()
+        println("$name is turned on. Speaker volume is set to $speakerVolume and channel number is set to " +
+                "$channelNumber.")
+    }
+
+    override fun turnOff() {
+        super.turnOff()
+        println("$name is turned off.")
+    }
 
     fun increaseSpeakerVolume() {
         speakerVolume++
@@ -59,6 +125,7 @@ class SmartTVDevice(deviceName: String, deviceCategory: String) :
 
 open class SmartDevice(val name: String = "Android TV", val category: String = "Entertainment") {
     var deviceStatus = "online"
+    open val deviceType = "unknown"
 
     constructor(name: String, category: String, statusCode: Int) : this(name = name, category = category) {
         deviceStatus = when (statusCode) {
@@ -68,23 +135,513 @@ open class SmartDevice(val name: String = "Android TV", val category: String = "
         }
     }
 
-    fun turnOn() {
-        println("Smart device is turned on.")
+    open fun turnOn() {
+        deviceStatus = "on"
     }
 
-    fun turnOff() {
-        println("Smart device is turned off.")
+    open fun turnOff() {
+        deviceStatus = "off"
     }
 }
 
-fun main() {
-    val smartTvDevice = SmartDevice()
+///*
+// * Ejemplo sobre el uso de clases, curso de ANDROID BASICS WITH COMPOSE
+// * al detectar codigo comun en ambas implementaciones, es posible usar los
+// * métodos de la clase padre para reutilizar dicho codigo, entonces cambiamos
+// * el código de ambos métodos en la clase padre SmartDevice y llamamos a ese
+// * código desde las clase hijo usando la palabra reservada super, se hace
+// * invocando a los métodos desde el padre con super.turnOn() y super.turnOff()
+// */
+//
+//fun main() {
+//    var smartDevice: SmartDevice = SmartTvDevice("Android TV", "Entertainment")
+//    smartDevice.turnOn()
+//
+//    smartDevice = SmartLightDevice("Google Light", "Utility")
+//    smartDevice.turnOn()
+//}
+//
+//class SmartHome(
+//    val smartTvDevice: SmartTvDevice,
+//    val smartLightDevice: SmartLightDevice
+//) {
+//    fun turnOnTv() {
+//        smartTvDevice.turnOn()
+//    }
+//
+//    fun turnOffTv() {
+//        smartTvDevice.turnOff()
+//    }
+//
+//    fun increaseTvVolume() {
+//        smartTvDevice.increaseSpeakerVolume()
+//    }
+//
+//    fun changeTvChannelToNext() {
+//        smartTvDevice.nextChannel()
+//    }
+//
+//    fun turnOnLight() {
+//        smartLightDevice.turnOn()
+//    }
+//
+//    fun turnOffLight() {
+//        smartLightDevice.turnOff()
+//    }
+//
+//    fun increaseLightBrightness() {
+//        smartLightDevice.increaseBrightness()
+//    }
+//
+//    fun turnOffAllDevices() {
+//        smartLightDevice.turnOff()
+//        smartTvDevice.turnOff()
+//    }
+//}
+//
+//class SmartLightDevice(deviceName: String, deviceCategory: String) :
+//    SmartDevice(name = deviceName, category = deviceCategory) {
+//    var brightnessLevel = 0
+//        set(value) {
+//            if (value in 0..100) {
+//                field = value
+//            }
+//        }
+//
+//    override fun turnOn() {
+//        super.turnOn()
+//        brightnessLevel = 2
+//        println("$name turned on. The brightness level is $brightnessLevel")
+//    }
+//
+//    override fun turnOff() {
+//        super.turnOff()
+//        brightnessLevel = 0
+//        println("$name turned off.")
+//    }
+//
+//    fun increaseBrightness() {
+//        brightnessLevel++
+//        println("Brightness increase to $brightnessLevel")
+//    }
+//}
+//
+//class SmartTvDevice(deviceName: String, deviceCategory: String) :
+//    SmartDevice(name = deviceName, category = deviceCategory) {
+//    var speakerVolume = 2
+//        set(value) {
+//            if (value in 0..100) {
+//                field = value
+//            }
+//        }
+//    var channelNumber = 1
+//        set(value) {
+//            if (value in 0..200) {
+//                field = value
+//            }
+//        }
+//
+//    override fun turnOn() {
+//        super.turnOn()
+//        println("$name is turned on. Speaker volume is set to $speakerVolume and channel number is set to " +
+//                "$channelNumber.")
+//    }
+//
+//    override fun turnOff() {
+//        super.turnOff()
+//        println("$name is turned off.")
+//    }
+//
+//    fun increaseSpeakerVolume() {
+//        speakerVolume++
+//        println("Speaker volume increased to $speakerVolume")
+//    }
+//
+//    fun nextChannel() {
+//        channelNumber++
+//        println("Channel number increase to $channelNumber")
+//    }
+//}
+//
+//open class SmartDevice(val name: String = "Android TV", val category: String = "Entertainment") {
+//    var deviceStatus = "online"
+//
+//    constructor(name: String, category: String, statusCode: Int) : this(name = name, category = category) {
+//        deviceStatus = when (statusCode) {
+//            0 -> "offline"
+//            1 -> "online"
+//            else -> "unknown"
+//        }
+//    }
+//
+//    open fun turnOn() {
+//        deviceStatus = "on"
+//    }
+//
+//    open fun turnOff() {
+//        deviceStatus = "off"
+//    }
+//}
 
-    println("Device name is: ${smartTvDevice.name}")
+///*
+// * Ejemplo sobre el uso de clases, curso de ANDROID BASICS WITH COMPOSE
+// * sobreescritura de métodos heredados, es posible que si bien todas las
+// * clases tienen una forma de hacer turnOn y turnOff, cada una de ellas
+// * tenga una forma particular de hacerlo, por eso es necesario llevar a
+// * cabo una implementación particular de estos metodos, la cual puede
+// * diferir de la implementación original en el padre
+// * ahora para poder sobreescribir los métodos turnOn y turnOff de la clase
+// * SmartDevice desde las clases SmartTvDevice y SmartLightDevice es necesario
+// * hacer dos cosas antes, la primera es 'abrir' ambos metodos con el prefijo
+// * open y la segunda es poner en las clases hijos los metodos con el prefijo
+// * override
+// * una vez hecha la sobreescritura de los métodos podemos hacer algunas pruebas
+// * veamos la clase main
+// * ahora se puede ver claramente como, un mismo metodo llamado desde la misma
+// * variable, tiene dos conductas diferentes, ya que muestra dos salidas diferentes
+// *   Android TV is turned on. Speaker volume is set to 2 and channel number is set to 1.
+// *   Google Light turned on. The brightness level is 2
+// * esto es un ejemplo de polimorfismo ya que ambos usan la misma interfaz de métodos
+// * de la clase SmartDevice
+// */
+//
+//fun main() {
+//    var smartDevice: SmartDevice = SmartTvDevice("Android TV", "Entertainment")
+//    smartDevice.turnOn()
+//
+//    smartDevice = SmartLightDevice("Google Light", "Utility")
+//    smartDevice.turnOn()
+//}
+//
+//class SmartHome(
+//    val smartTvDevice: SmartTvDevice,
+//    val smartLightDevice: SmartLightDevice
+//) {
+//    fun turnOnTv() {
+//        smartTvDevice.turnOn()
+//    }
+//
+//    fun turnOffTv() {
+//        smartTvDevice.turnOff()
+//    }
+//
+//    fun increaseTvVolume() {
+//        smartTvDevice.increaseSpeakerVolume()
+//    }
+//
+//    fun changeTvChannelToNext() {
+//        smartTvDevice.nextChannel()
+//    }
+//
+//    fun turnOnLight() {
+//        smartLightDevice.turnOn()
+//    }
+//
+//    fun turnOffLight() {
+//        smartLightDevice.turnOff()
+//    }
+//
+//    fun increaseLightBrightness() {
+//        smartLightDevice.increaseBrightness()
+//    }
+//
+//    fun turnOffAllDevices() {
+//        smartLightDevice.turnOff()
+//        smartTvDevice.turnOff()
+//    }
+//}
+//
+//class SmartLightDevice(deviceName: String, deviceCategory: String) :
+//    SmartDevice(name = deviceName, category = deviceCategory) {
+//    var brightnessLevel = 0
+//        set(value) {
+//            if (value in 0..100) {
+//                field = value
+//            }
+//        }
+//
+//    override fun turnOn() {
+//        deviceStatus = "on"
+//        brightnessLevel = 2
+//        println("$name turned on. The brightness level is $brightnessLevel")
+//    }
+//
+//    override fun turnOff() {
+//        deviceStatus = "off"
+//        brightnessLevel = 0
+//        println("$name turned off.")
+//    }
+//
+//    fun increaseBrightness() {
+//        brightnessLevel++
+//        println("Brightness increase to $brightnessLevel")
+//    }
+//}
+//
+//class SmartTvDevice(deviceName: String, deviceCategory: String) :
+//    SmartDevice(name = deviceName, category = deviceCategory) {
+//    var speakerVolume = 2
+//        set(value) {
+//            if (value in 0..100) {
+//                field = value
+//            }
+//        }
+//    var channelNumber = 1
+//        set(value) {
+//            if (value in 0..200) {
+//                field = value
+//            }
+//        }
+//
+//    override fun turnOn() {
+//        deviceStatus = "on"
+//        println("$name is turned on. Speaker volume is set to $speakerVolume and channel number is set to " +
+//                "$channelNumber.")
+//    }
+//
+//    override fun turnOff() {
+//        deviceStatus = "off"
+//        println("$name is turned off.")
+//    }
+//
+//    fun increaseSpeakerVolume() {
+//        speakerVolume++
+//        println("Speaker volume increased to $speakerVolume")
+//    }
+//
+//    fun nextChannel() {
+//        channelNumber++
+//        println("Channel number increase to $channelNumber")
+//    }
+//}
+//
+//open class SmartDevice(val name: String = "Android TV", val category: String = "Entertainment") {
+//    var deviceStatus = "online"
+//
+//    constructor(name: String, category: String, statusCode: Int) : this(name = name, category = category) {
+//        deviceStatus = when (statusCode) {
+//            0 -> "offline"
+//            1 -> "online"
+//            else -> "unknown"
+//        }
+//    }
+//
+//    open fun turnOn() {
+//        println("Smart device is turned on.")
+//    }
+//
+//    open fun turnOff() {
+//        println("Smart device is turned off.")
+//    }
+//}
 
-    smartTvDevice.turnOn()
-    smartTvDevice.turnOff()
-}
+///*
+// * Ejemplo sobre el uso de clases, curso de ANDROID BASICS WITH COMPOSE
+// * relaciones 'tiene-un', es cuando un atributo de una clase es instancia
+// * de otra
+// * ahora vamos a cambiar la posición de la función main para poder tenerla
+// * más a la mano y creamos otra clase, esta vez es SmartHome, esta clase
+// * tiene metodos para controlar dos dispositivos, uno es el smartTvDevice
+// * y el otro es el smartLightDevice, desde la interfaz de SmartHome se pueden
+// * controlar todos los dispositivos de la clase, es decir, todos los objetos
+// * que la clase SmartHome tiene.
+// */
+//
+//class SmartHome(
+//    val smartTvDevice: SmartTvDevice,
+//    val smartLightDevice: SmartLightDevice
+//) {
+//    fun turnOnTv() {
+//        smartTvDevice.turnOn()
+//    }
+//
+//    fun turnOffTv() {
+//        smartTvDevice.turnOff()
+//    }
+//
+//    fun increaseTvVolume() {
+//        smartTvDevice.increaseSpeakerVolume()
+//    }
+//
+//    fun changeTvChannelToNext() {
+//        smartTvDevice.nextChannel()
+//    }
+//
+//    fun turnOnLight() {
+//        smartLightDevice.turnOn()
+//    }
+//
+//    fun turnOffLight() {
+//        smartLightDevice.turnOff()
+//    }
+//
+//    fun increaseLightBrightness() {
+//        smartLightDevice.increaseBrightness()
+//    }
+//
+//    fun turnOffAllDevices() {
+//        smartLightDevice.turnOff()
+//        smartTvDevice.turnOff()
+//    }
+//}
+//
+//fun main() {
+//    val smartTvDevice = SmartDevice()
+//
+//    println("Device name is: ${smartTvDevice.name}")
+//
+//    smartTvDevice.turnOn()
+//    smartTvDevice.turnOff()
+//}
+//
+//class SmartLightDevice(deviceName: String, deviceCategory: String) :
+//    SmartDevice(name = deviceName, category = deviceCategory) {
+//    var brightnessLevel = 0
+//        set(value) {
+//            if (value in 0..100) {
+//                field = value
+//            }
+//        }
+//
+//    fun increaseBrightness() {
+//        brightnessLevel++
+//        println("Brightness increase to $brightnessLevel")
+//    }
+//}
+//
+//class SmartTvDevice(deviceName: String, deviceCategory: String) :
+//    SmartDevice(name = deviceName, category = deviceCategory) {
+//    var speakerVolume = 2
+//        set(value) {
+//            if (value in 0..100) {
+//                field = value
+//            }
+//        }
+//    var channelNumber = 1
+//        set(value) {
+//            if (value in 0..200) {
+//                field = value
+//            }
+//        }
+//
+//    fun increaseSpeakerVolume() {
+//        speakerVolume++
+//        println("Speaker volume increased to $speakerVolume")
+//    }
+//
+//    fun nextChannel() {
+//        channelNumber++
+//        println("Channel number increase to $channelNumber")
+//    }
+//}
+//
+//open class SmartDevice(val name: String = "Android TV", val category: String = "Entertainment") {
+//    var deviceStatus = "online"
+//
+//    constructor(name: String, category: String, statusCode: Int) : this(name = name, category = category) {
+//        deviceStatus = when (statusCode) {
+//            0 -> "offline"
+//            1 -> "online"
+//            else -> "unknown"
+//        }
+//    }
+//
+//    fun turnOn() {
+//        println("Smart device is turned on.")
+//    }
+//
+//    fun turnOff() {
+//        println("Smart device is turned off.")
+//    }
+//}
+
+///*
+// * Ejemplo sobre el uso de clases, curso de ANDROID BASICS WITH COMPOSE
+// * HERENCIA, es posible generar otras clases usando como base la clase
+// * definida (SmartDevice) para tener un smart TV, o una smart light
+// * toda clase creada es una clase inmutable, es decir, es una clase tipo
+// * final, para poder extender una clase es necesario indicarlo con la
+// * palabra reservada open
+// * en el cuerpo de la nueva clase es posible definir propiedades de esta
+// * clase (speakerVolume) que no esten presentes en la clase padre
+// * (SmartDevice)
+// * además es posible definir más propiedades y metodos para ser usados por
+// * los objetos instanciados de esta clase
+// * relaciones es-un, tanto SmartTVDevice como SmartLightDevice 'son' del
+// * tipo SmartDevice, lo contrario no es posible afirmarlo, esta condición
+// * debe ser satisfecha y no se debe usar herencia sólo para reutilizar
+// * código
+// */
+//
+//class SmartLightDevice(deviceName: String, deviceCategory: String) :
+//    SmartDevice(name = deviceName, category = deviceCategory) {
+//    var brightnessLevel = 0
+//        set(value) {
+//            if (value in 0..100) {
+//                field = value
+//            }
+//        }
+//
+//    fun increaseBrightness() {
+//        brightnessLevel++
+//        println("Brightness increase to $brightnessLevel")
+//    }
+//}
+//
+//class SmartTVDevice(deviceName: String, deviceCategory: String) :
+//    SmartDevice(name = deviceName, category = deviceCategory) {
+//    var speakerVolume = 2
+//        set(value) {
+//            if (value in 0..100) {
+//                field = value
+//            }
+//        }
+//    var channelNumber = 1
+//        set(value) {
+//            if (value in 0..200) {
+//                field = value
+//            }
+//        }
+//
+//    fun increaseSpeakerVolume() {
+//        speakerVolume++
+//        println("Speaker volume increased to $speakerVolume")
+//    }
+//
+//    fun nextChannel() {
+//        channelNumber++
+//        println("Channel number increase to $channelNumber")
+//    }
+//}
+//
+//open class SmartDevice(val name: String = "Android TV", val category: String = "Entertainment") {
+//    var deviceStatus = "online"
+//
+//    constructor(name: String, category: String, statusCode: Int) : this(name = name, category = category) {
+//        deviceStatus = when (statusCode) {
+//            0 -> "offline"
+//            1 -> "online"
+//            else -> "unknown"
+//        }
+//    }
+//
+//    fun turnOn() {
+//        println("Smart device is turned on.")
+//    }
+//
+//    fun turnOff() {
+//        println("Smart device is turned off.")
+//    }
+//}
+//
+//fun main() {
+//    val smartTvDevice = SmartDevice()
+//
+//    println("Device name is: ${smartTvDevice.name}")
+//
+//    smartTvDevice.turnOn()
+//    smartTvDevice.turnOff()
+//}
 
 ///*
 // * Ejemplo sobre el uso de clases, curso de ANDROID BASICS WITH COMPOSE
