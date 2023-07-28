@@ -1,14 +1,7 @@
 
 /*
  * Ejemplo sobre el uso de clases, curso de ANDROID BASICS WITH COMPOSE
- * tambien es posible sobreescribir una variable definida en el padre,
- * para ello es necesario abrirla con 'open'
- * por ejemplo, creamos una variable en el padre
- *     open val deviceType = "unknown"
- * y ahora la usamos desde los hijos sobreescribiendola
- *     override val deviceType = "Smart TV"
- *     override val deviceType = "Smart Light"
- * cada linea en su respectiva clase, en SmartTvDevice y en SmartLightDevice
+ *
  */
 
 fun main() {
@@ -23,12 +16,17 @@ class SmartHome(
     val smartTvDevice: SmartTvDevice,
     val smartLightDevice: SmartLightDevice
 ) {
+    var deviceTurnOnCount = 0
+        private set
+
     fun turnOnTv() {
         smartTvDevice.turnOn()
+        deviceTurnOnCount++
     }
 
     fun turnOffTv() {
         smartTvDevice.turnOff()
+        deviceTurnOnCount--
     }
 
     fun increaseTvVolume() {
@@ -41,10 +39,12 @@ class SmartHome(
 
     fun turnOnLight() {
         smartLightDevice.turnOn()
+        deviceTurnOnCount++
     }
 
     fun turnOffLight() {
         smartLightDevice.turnOff()
+        deviceTurnOnCount--
     }
 
     fun increaseLightBrightness() {
@@ -60,7 +60,7 @@ class SmartHome(
 class SmartLightDevice(deviceName: String, deviceCategory: String) :
     SmartDevice(name = deviceName, category = deviceCategory) {
     override val deviceType = "Smart Light"
-    var brightnessLevel = 0
+    private var brightnessLevel = 0
         set(value) {
             if (value in 0..100) {
                 field = value
@@ -88,13 +88,13 @@ class SmartLightDevice(deviceName: String, deviceCategory: String) :
 class SmartTvDevice(deviceName: String, deviceCategory: String) :
     SmartDevice(name = deviceName, category = deviceCategory) {
     override val deviceType = "Smart TV"
-    var speakerVolume = 2
+    private var speakerVolume = 2
         set(value) {
             if (value in 0..100) {
                 field = value
             }
         }
-    var channelNumber = 1
+    private var channelNumber = 1
         set(value) {
             if (value in 0..200) {
                 field = value
@@ -103,8 +103,10 @@ class SmartTvDevice(deviceName: String, deviceCategory: String) :
 
     override fun turnOn() {
         super.turnOn()
-        println("$name is turned on. Speaker volume is set to $speakerVolume and channel number is set to " +
-                "$channelNumber.")
+        println(
+            "$name is turned on. Speaker volume is set to $speakerVolume and channel number is set to " +
+                    "$channelNumber."
+        )
     }
 
     override fun turnOff() {
@@ -125,6 +127,7 @@ class SmartTvDevice(deviceName: String, deviceCategory: String) :
 
 open class SmartDevice(val name: String = "Android TV", val category: String = "Entertainment") {
     var deviceStatus = "online"
+        protected set
     open val deviceType = "unknown"
 
     constructor(name: String, category: String, statusCode: Int) : this(name = name, category = category) {
@@ -143,6 +146,781 @@ open class SmartDevice(val name: String = "Android TV", val category: String = "
         deviceStatus = "off"
     }
 }
+
+///*
+// * Ejemplo sobre el uso de clases, curso de ANDROID BASICS WITH COMPOSE
+// * atributos como speakerVolume y channelNumber en SmartTvDevice deben
+// * ser privados ya que no se deben modificar desde el exterior
+// * igual con brightnessLevel en SmartLightDevice
+// */
+//
+//fun main() {
+//    var smartDevice: SmartDevice = SmartTvDevice("Android TV", "Entertainment")
+//    smartDevice.turnOn()
+//
+//    smartDevice = SmartLightDevice("Google Light", "Utility")
+//    smartDevice.turnOn()
+//}
+//
+//class SmartHome(
+//    val smartTvDevice: SmartTvDevice,
+//    val smartLightDevice: SmartLightDevice
+//) {
+//    var deviceTurnOnCount = 0
+//        private set
+//
+//    fun turnOnTv() {
+//        smartTvDevice.turnOn()
+//        deviceTurnOnCount++
+//    }
+//
+//    fun turnOffTv() {
+//        smartTvDevice.turnOff()
+//        deviceTurnOnCount--
+//    }
+//
+//    fun increaseTvVolume() {
+//        smartTvDevice.increaseSpeakerVolume()
+//    }
+//
+//    fun changeTvChannelToNext() {
+//        smartTvDevice.nextChannel()
+//    }
+//
+//    fun turnOnLight() {
+//        smartLightDevice.turnOn()
+//        deviceTurnOnCount++
+//    }
+//
+//    fun turnOffLight() {
+//        smartLightDevice.turnOff()
+//        deviceTurnOnCount--
+//    }
+//
+//    fun increaseLightBrightness() {
+//        smartLightDevice.increaseBrightness()
+//    }
+//
+//    fun turnOffAllDevices() {
+//        smartLightDevice.turnOff()
+//        smartTvDevice.turnOff()
+//    }
+//}
+//
+//class SmartLightDevice(deviceName: String, deviceCategory: String) :
+//    SmartDevice(name = deviceName, category = deviceCategory) {
+//    override val deviceType = "Smart Light"
+//    private var brightnessLevel = 0
+//        set(value) {
+//            if (value in 0..100) {
+//                field = value
+//            }
+//        }
+//
+//    override fun turnOn() {
+//        super.turnOn()
+//        brightnessLevel = 2
+//        println("$name turned on. The brightness level is $brightnessLevel")
+//    }
+//
+//    override fun turnOff() {
+//        super.turnOff()
+//        brightnessLevel = 0
+//        println("$name turned off.")
+//    }
+//
+//    fun increaseBrightness() {
+//        brightnessLevel++
+//        println("Brightness increase to $brightnessLevel")
+//    }
+//}
+//
+//class SmartTvDevice(deviceName: String, deviceCategory: String) :
+//    SmartDevice(name = deviceName, category = deviceCategory) {
+//    override val deviceType = "Smart TV"
+//    private var speakerVolume = 2
+//        set(value) {
+//            if (value in 0..100) {
+//                field = value
+//            }
+//        }
+//    private var channelNumber = 1
+//        set(value) {
+//            if (value in 0..200) {
+//                field = value
+//            }
+//        }
+//
+//    override fun turnOn() {
+//        super.turnOn()
+//        println(
+//            "$name is turned on. Speaker volume is set to $speakerVolume and channel number is set to " +
+//                    "$channelNumber."
+//        )
+//    }
+//
+//    override fun turnOff() {
+//        super.turnOff()
+//        println("$name is turned off.")
+//    }
+//
+//    fun increaseSpeakerVolume() {
+//        speakerVolume++
+//        println("Speaker volume increased to $speakerVolume")
+//    }
+//
+//    fun nextChannel() {
+//        channelNumber++
+//        println("Channel number increase to $channelNumber")
+//    }
+//}
+//
+//open class SmartDevice(val name: String = "Android TV", val category: String = "Entertainment") {
+//    var deviceStatus = "online"
+//        protected set
+//    open val deviceType = "unknown"
+//
+//    constructor(name: String, category: String, statusCode: Int) : this(name = name, category = category) {
+//        deviceStatus = when (statusCode) {
+//            0 -> "offline"
+//            1 -> "online"
+//            else -> "unknown"
+//        }
+//    }
+//
+//    open fun turnOn() {
+//        deviceStatus = "on"
+//    }
+//
+//    open fun turnOff() {
+//        deviceStatus = "off"
+//    }
+//}
+
+///*
+// * Ejemplo sobre el uso de clases, curso de ANDROID BASICS WITH COMPOSE
+// * la visibilidad de los modificadore para los métodos se puede controlar
+// * con la siguiente sintaxis
+// *     protected fun nextChannel() { ...
+// * ahora el método nextChannel solo se puede acceder desde las subclases
+// * de SmartTvDevice, esto provoca un error por el acceso usado desde la
+// * clase SmartHome
+// * tambien es posible controlar el nivel de acceso de los constructores
+// *     open class SmartDevice protected constructor(val name: String ...
+// * esto sólo permite el uso del constructor principal con parametros
+// * desde las clases hijos
+// * finalmente tambien es posible controlar el nivel de acceso de las clases
+// * completas
+// *     internal open class SmartDevice(val name: String
+// * precediendo el nivel de acceso como primer término en la declaración
+// * de la clase, incluso antes de la palabra reservada 'open'
+// * se recomienda una asignación restrictiva a todos los elementos, es decir,
+// * declarar todos private, si no puede ser private entonces es protected, si
+// * no se puede con protected entonces es internal y si no, finalmente optar
+// * por public.
+// */
+//
+//fun main() {
+//    var smartDevice: SmartDevice = SmartTvDevice("Android TV", "Entertainment")
+//    smartDevice.turnOn()
+//
+//    smartDevice = SmartLightDevice("Google Light", "Utility")
+//    smartDevice.turnOn()
+//}
+//
+//class SmartHome(
+//    val smartTvDevice: SmartTvDevice,
+//    val smartLightDevice: SmartLightDevice
+//) {
+//    var deviceTurnOnCount = 0
+//        private set
+//
+//    fun turnOnTv() {
+//        smartTvDevice.turnOn()
+//        deviceTurnOnCount++
+//    }
+//
+//    fun turnOffTv() {
+//        smartTvDevice.turnOff()
+//        deviceTurnOnCount--
+//    }
+//
+//    fun increaseTvVolume() {
+//        smartTvDevice.increaseSpeakerVolume()
+//    }
+//
+//    fun changeTvChannelToNext() {
+//        smartTvDevice.nextChannel()
+//    }
+//
+//    fun turnOnLight() {
+//        smartLightDevice.turnOn()
+//        deviceTurnOnCount++
+//    }
+//
+//    fun turnOffLight() {
+//        smartLightDevice.turnOff()
+//        deviceTurnOnCount--
+//    }
+//
+//    fun increaseLightBrightness() {
+//        smartLightDevice.increaseBrightness()
+//    }
+//
+//    fun turnOffAllDevices() {
+//        smartLightDevice.turnOff()
+//        smartTvDevice.turnOff()
+//    }
+//}
+//
+//class SmartLightDevice(deviceName: String, deviceCategory: String) :
+//    SmartDevice(name = deviceName, category = deviceCategory) {
+//    override val deviceType = "Smart Light"
+//    var brightnessLevel = 0
+//        set(value) {
+//            if (value in 0..100) {
+//                field = value
+//            }
+//        }
+//
+//    override fun turnOn() {
+//        super.turnOn()
+//        brightnessLevel = 2
+//        println("$name turned on. The brightness level is $brightnessLevel")
+//    }
+//
+//    override fun turnOff() {
+//        super.turnOff()
+//        brightnessLevel = 0
+//        println("$name turned off.")
+//    }
+//
+//    fun increaseBrightness() {
+//        brightnessLevel++
+//        println("Brightness increase to $brightnessLevel")
+//    }
+//}
+//
+//class SmartTvDevice(deviceName: String, deviceCategory: String) :
+//    SmartDevice(name = deviceName, category = deviceCategory) {
+//    override val deviceType = "Smart TV"
+//    var speakerVolume = 2
+//        set(value) {
+//            if (value in 0..100) {
+//                field = value
+//            }
+//        }
+//    var channelNumber = 1
+//        set(value) {
+//            if (value in 0..200) {
+//                field = value
+//            }
+//        }
+//
+//    override fun turnOn() {
+//        super.turnOn()
+//        println(
+//            "$name is turned on. Speaker volume is set to $speakerVolume and channel number is set to " +
+//                    "$channelNumber."
+//        )
+//    }
+//
+//    override fun turnOff() {
+//        super.turnOff()
+//        println("$name is turned off.")
+//    }
+//
+//    fun increaseSpeakerVolume() {
+//        speakerVolume++
+//        println("Speaker volume increased to $speakerVolume")
+//    }
+//
+//    fun nextChannel() {
+//        channelNumber++
+//        println("Channel number increase to $channelNumber")
+//    }
+//}
+//
+//open class SmartDevice(val name: String = "Android TV", val category: String = "Entertainment") {
+//    var deviceStatus = "online"
+//        protected set
+//    open val deviceType = "unknown"
+//
+//    constructor(name: String, category: String, statusCode: Int) : this(name = name, category = category) {
+//        deviceStatus = when (statusCode) {
+//            0 -> "offline"
+//            1 -> "online"
+//            else -> "unknown"
+//        }
+//    }
+//
+//    open fun turnOn() {
+//        deviceStatus = "on"
+//    }
+//
+//    open fun turnOff() {
+//        deviceStatus = "off"
+//    }
+//}
+
+///*
+// * Ejemplo sobre el uso de clases, curso de ANDROID BASICS WITH COMPOSE
+// * ahora en la clase SmartHome vamos a poner una propiedad deviceTurnOnCount
+// * con un modificador set privado, es decir, es de solo lectura desde el
+// * exterior, de la siguiente forma:
+// *     var deviceTurnOnCount = 0
+// *         private set
+// * y agregamos los incrementos y decrementos en los respectivos métodos que
+// * encienden y apagan los diferentes elementos de SmartHome
+// */
+//
+//fun main() {
+//    var smartDevice: SmartDevice = SmartTvDevice("Android TV", "Entertainment")
+//    smartDevice.turnOn()
+//
+//    smartDevice = SmartLightDevice("Google Light", "Utility")
+//    smartDevice.turnOn()
+//}
+//
+//class SmartHome(
+//    val smartTvDevice: SmartTvDevice,
+//    val smartLightDevice: SmartLightDevice
+//) {
+//    var deviceTurnOnCount = 0
+//        private set
+//
+//    fun turnOnTv() {
+//        smartTvDevice.turnOn()
+//        deviceTurnOnCount++
+//    }
+//
+//    fun turnOffTv() {
+//        smartTvDevice.turnOff()
+//        deviceTurnOnCount--
+//    }
+//
+//    fun increaseTvVolume() {
+//        smartTvDevice.increaseSpeakerVolume()
+//    }
+//
+//    fun changeTvChannelToNext() {
+//        smartTvDevice.nextChannel()
+//    }
+//
+//    fun turnOnLight() {
+//        smartLightDevice.turnOn()
+//        deviceTurnOnCount++
+//    }
+//
+//    fun turnOffLight() {
+//        smartLightDevice.turnOff()
+//        deviceTurnOnCount--
+//    }
+//
+//    fun increaseLightBrightness() {
+//        smartLightDevice.increaseBrightness()
+//    }
+//
+//    fun turnOffAllDevices() {
+//        smartLightDevice.turnOff()
+//        smartTvDevice.turnOff()
+//    }
+//}
+//
+//class SmartLightDevice(deviceName: String, deviceCategory: String) :
+//    SmartDevice(name = deviceName, category = deviceCategory) {
+//    override val deviceType = "Smart Light"
+//    var brightnessLevel = 0
+//        set(value) {
+//            if (value in 0..100) {
+//                field = value
+//            }
+//        }
+//
+//    override fun turnOn() {
+//        super.turnOn()
+//        brightnessLevel = 2
+//        println("$name turned on. The brightness level is $brightnessLevel")
+//    }
+//
+//    override fun turnOff() {
+//        super.turnOff()
+//        brightnessLevel = 0
+//        println("$name turned off.")
+//    }
+//
+//    fun increaseBrightness() {
+//        brightnessLevel++
+//        println("Brightness increase to $brightnessLevel")
+//    }
+//}
+//
+//class SmartTvDevice(deviceName: String, deviceCategory: String) :
+//    SmartDevice(name = deviceName, category = deviceCategory) {
+//    override val deviceType = "Smart TV"
+//    var speakerVolume = 2
+//        set(value) {
+//            if (value in 0..100) {
+//                field = value
+//            }
+//        }
+//    var channelNumber = 1
+//        set(value) {
+//            if (value in 0..200) {
+//                field = value
+//            }
+//        }
+//
+//    override fun turnOn() {
+//        super.turnOn()
+//        println(
+//            "$name is turned on. Speaker volume is set to $speakerVolume and channel number is set to " +
+//                    "$channelNumber."
+//        )
+//    }
+//
+//    override fun turnOff() {
+//        super.turnOff()
+//        println("$name is turned off.")
+//    }
+//
+//    fun increaseSpeakerVolume() {
+//        speakerVolume++
+//        println("Speaker volume increased to $speakerVolume")
+//    }
+//
+//    fun nextChannel() {
+//        channelNumber++
+//        println("Channel number increase to $channelNumber")
+//    }
+//}
+//
+//open class SmartDevice(val name: String = "Android TV", val category: String = "Entertainment") {
+//    var deviceStatus = "online"
+//        protected set
+//    open val deviceType = "unknown"
+//
+//    constructor(name: String, category: String, statusCode: Int) : this(name = name, category = category) {
+//        deviceStatus = when (statusCode) {
+//            0 -> "offline"
+//            1 -> "online"
+//            else -> "unknown"
+//        }
+//    }
+//
+//    open fun turnOn() {
+//        deviceStatus = "on"
+//    }
+//
+//    open fun turnOff() {
+//        deviceStatus = "off"
+//    }
+//}
+
+///*
+// * Ejemplo sobre el uso de clases, curso de ANDROID BASICS WITH COMPOSE
+// * modificadores de acceso, existen cuatro:
+// *   public - visibilidad por default, se ve desde cualquier lado
+// *   private - solo se ve desde la misma clase o archivo de código fuente
+// *   protected - se ve desde la clase y las subclases
+// *   internal - se ve desde el mismo módulo, es similar a private pero
+// *              se permite el acceso a los elementos en el mismo modulo
+// * un módulo es una coleccion de archivos de código fuente usados para poder
+// * dividir el código en unidades pequeñas
+// * un paquete es un directorio o folder donde se agrupan clases relacionadas
+// * un módulo puede contener muchos paquetes
+// * por ejemplo, en la clase SmartDevice
+// *     private var deviceStatus = "online"
+// * es posible poner como acceso privado a la propiedad deviceStatus, o controlar
+// * sólo el acceso al método set, en este caso se tiene
+// *     var deviceStatus = "online"
+// *         protected set(value) {
+// *             field = value
+// *         }
+// * si no se lleva a cabo ninguna operación de verificación como en el caso anterior
+// * basta poner el código siguiente
+// *     var deviceStatus = "online"
+// *         protected set
+// */
+//
+//fun main() {
+//    var smartDevice: SmartDevice = SmartTvDevice("Android TV", "Entertainment")
+//    smartDevice.turnOn()
+//
+//    smartDevice = SmartLightDevice("Google Light", "Utility")
+//    smartDevice.turnOn()
+//}
+//
+//class SmartHome(
+//    val smartTvDevice: SmartTvDevice,
+//    val smartLightDevice: SmartLightDevice
+//) {
+//    fun turnOnTv() {
+//        smartTvDevice.turnOn()
+//    }
+//
+//    fun turnOffTv() {
+//        smartTvDevice.turnOff()
+//    }
+//
+//    fun increaseTvVolume() {
+//        smartTvDevice.increaseSpeakerVolume()
+//    }
+//
+//    fun changeTvChannelToNext() {
+//        smartTvDevice.nextChannel()
+//    }
+//
+//    fun turnOnLight() {
+//        smartLightDevice.turnOn()
+//    }
+//
+//    fun turnOffLight() {
+//        smartLightDevice.turnOff()
+//    }
+//
+//    fun increaseLightBrightness() {
+//        smartLightDevice.increaseBrightness()
+//    }
+//
+//    fun turnOffAllDevices() {
+//        smartLightDevice.turnOff()
+//        smartTvDevice.turnOff()
+//    }
+//}
+//
+//class SmartLightDevice(deviceName: String, deviceCategory: String) :
+//    SmartDevice(name = deviceName, category = deviceCategory) {
+//    override val deviceType = "Smart Light"
+//    var brightnessLevel = 0
+//        set(value) {
+//            if (value in 0..100) {
+//                field = value
+//            }
+//        }
+//
+//    override fun turnOn() {
+//        super.turnOn()
+//        brightnessLevel = 2
+//        println("$name turned on. The brightness level is $brightnessLevel")
+//    }
+//
+//    override fun turnOff() {
+//        super.turnOff()
+//        brightnessLevel = 0
+//        println("$name turned off.")
+//    }
+//
+//    fun increaseBrightness() {
+//        brightnessLevel++
+//        println("Brightness increase to $brightnessLevel")
+//    }
+//}
+//
+//class SmartTvDevice(deviceName: String, deviceCategory: String) :
+//    SmartDevice(name = deviceName, category = deviceCategory) {
+//    override val deviceType = "Smart TV"
+//    var speakerVolume = 2
+//        set(value) {
+//            if (value in 0..100) {
+//                field = value
+//            }
+//        }
+//    var channelNumber = 1
+//        set(value) {
+//            if (value in 0..200) {
+//                field = value
+//            }
+//        }
+//
+//    override fun turnOn() {
+//        super.turnOn()
+//        println("$name is turned on. Speaker volume is set to $speakerVolume and channel number is set to " +
+//                "$channelNumber.")
+//    }
+//
+//    override fun turnOff() {
+//        super.turnOff()
+//        println("$name is turned off.")
+//    }
+//
+//    fun increaseSpeakerVolume() {
+//        speakerVolume++
+//        println("Speaker volume increased to $speakerVolume")
+//    }
+//
+//    fun nextChannel() {
+//        channelNumber++
+//        println("Channel number increase to $channelNumber")
+//    }
+//}
+//
+//open class SmartDevice(val name: String = "Android TV", val category: String = "Entertainment") {
+//    var deviceStatus = "online"
+//        protected set
+//    open val deviceType = "unknown"
+//
+//    constructor(name: String, category: String, statusCode: Int) : this(name = name, category = category) {
+//        deviceStatus = when (statusCode) {
+//            0 -> "offline"
+//            1 -> "online"
+//            else -> "unknown"
+//        }
+//    }
+//
+//    open fun turnOn() {
+//        deviceStatus = "on"
+//    }
+//
+//    open fun turnOff() {
+//        deviceStatus = "off"
+//    }
+//}
+
+///*
+// * Ejemplo sobre el uso de clases, curso de ANDROID BASICS WITH COMPOSE
+// * tambien es posible sobreescribir una variable definida en el padre,
+// * para ello es necesario abrirla con 'open'
+// * por ejemplo, creamos una variable en el padre
+// *     open val deviceType = "unknown"
+// * y ahora la usamos desde los hijos sobreescribiendola
+// *     override val deviceType = "Smart TV"
+// *     override val deviceType = "Smart Light"
+// * cada linea en su respectiva clase, en SmartTvDevice y en SmartLightDevice
+// */
+//
+//fun main() {
+//    var smartDevice: SmartDevice = SmartTvDevice("Android TV", "Entertainment")
+//    smartDevice.turnOn()
+//
+//    smartDevice = SmartLightDevice("Google Light", "Utility")
+//    smartDevice.turnOn()
+//}
+//
+//class SmartHome(
+//    val smartTvDevice: SmartTvDevice,
+//    val smartLightDevice: SmartLightDevice
+//) {
+//    fun turnOnTv() {
+//        smartTvDevice.turnOn()
+//    }
+//
+//    fun turnOffTv() {
+//        smartTvDevice.turnOff()
+//    }
+//
+//    fun increaseTvVolume() {
+//        smartTvDevice.increaseSpeakerVolume()
+//    }
+//
+//    fun changeTvChannelToNext() {
+//        smartTvDevice.nextChannel()
+//    }
+//
+//    fun turnOnLight() {
+//        smartLightDevice.turnOn()
+//    }
+//
+//    fun turnOffLight() {
+//        smartLightDevice.turnOff()
+//    }
+//
+//    fun increaseLightBrightness() {
+//        smartLightDevice.increaseBrightness()
+//    }
+//
+//    fun turnOffAllDevices() {
+//        smartLightDevice.turnOff()
+//        smartTvDevice.turnOff()
+//    }
+//}
+//
+//class SmartLightDevice(deviceName: String, deviceCategory: String) :
+//    SmartDevice(name = deviceName, category = deviceCategory) {
+//    override val deviceType = "Smart Light"
+//    var brightnessLevel = 0
+//        set(value) {
+//            if (value in 0..100) {
+//                field = value
+//            }
+//        }
+//
+//    override fun turnOn() {
+//        super.turnOn()
+//        brightnessLevel = 2
+//        println("$name turned on. The brightness level is $brightnessLevel")
+//    }
+//
+//    override fun turnOff() {
+//        super.turnOff()
+//        brightnessLevel = 0
+//        println("$name turned off.")
+//    }
+//
+//    fun increaseBrightness() {
+//        brightnessLevel++
+//        println("Brightness increase to $brightnessLevel")
+//    }
+//}
+//
+//class SmartTvDevice(deviceName: String, deviceCategory: String) :
+//    SmartDevice(name = deviceName, category = deviceCategory) {
+//    override val deviceType = "Smart TV"
+//    var speakerVolume = 2
+//        set(value) {
+//            if (value in 0..100) {
+//                field = value
+//            }
+//        }
+//    var channelNumber = 1
+//        set(value) {
+//            if (value in 0..200) {
+//                field = value
+//            }
+//        }
+//
+//    override fun turnOn() {
+//        super.turnOn()
+//        println("$name is turned on. Speaker volume is set to $speakerVolume and channel number is set to " +
+//                "$channelNumber.")
+//    }
+//
+//    override fun turnOff() {
+//        super.turnOff()
+//        println("$name is turned off.")
+//    }
+//
+//    fun increaseSpeakerVolume() {
+//        speakerVolume++
+//        println("Speaker volume increased to $speakerVolume")
+//    }
+//
+//    fun nextChannel() {
+//        channelNumber++
+//        println("Channel number increase to $channelNumber")
+//    }
+//}
+//
+//open class SmartDevice(val name: String = "Android TV", val category: String = "Entertainment") {
+//    var deviceStatus = "online"
+//    open val deviceType = "unknown"
+//
+//    constructor(name: String, category: String, statusCode: Int) : this(name = name, category = category) {
+//        deviceStatus = when (statusCode) {
+//            0 -> "offline"
+//            1 -> "online"
+//            else -> "unknown"
+//        }
+//    }
+//
+//    open fun turnOn() {
+//        deviceStatus = "on"
+//    }
+//
+//    open fun turnOff() {
+//        deviceStatus = "off"
+//    }
+//}
 
 ///*
 // * Ejemplo sobre el uso de clases, curso de ANDROID BASICS WITH COMPOSE
@@ -750,7 +1528,7 @@ open class SmartDevice(val name: String = "Android TV", val category: String = "
 //
 //class SmartDevice {
 //    val name = "Android TV"
-//    val category = "Enertainment"
+//    val category = "Entertainment"
 //    var deviceStatus = "online"
 //
 //    fun turnOn() {
