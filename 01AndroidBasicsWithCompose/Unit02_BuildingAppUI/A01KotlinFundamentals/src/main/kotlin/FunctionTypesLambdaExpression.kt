@@ -1,31 +1,20 @@
 
 /*
  * Ejemplo sobre el uso de funciones y lambdas, curso de ANDROID BASICS WITH COMPOSE
- * ya que la función coins sólo se usa una vez, es posible pasar la expresion directamente
- * en el sitio de uso
- *     val treatFunction = trickOrTreat(false, { "$it quarters" } )
- * en vez de enviar la función por variable se envia el contenido de la misma
- * hay otra forma válida para escribir lo mismo, es el trailing lambda syntax,
- * permite escribir la lambda fuera del parentesis al ser la lambda el último parametro
- * de la función, de esta forma
- *     val treatFunction = trickOrTreat(false) { "$it quarters" }
- * el resultado es el mismo
+ * cuando una función devuelve una función o toma una función como argumento, estamos
+ * ante una higher-order function, trickOrTreat es una higher-order function
+ * Kotlin tiene varias de estas funciones disponibles, entre estas esta la función
+ *     repeat(times: Int, action: (Int) -> Unit)
+ * es posible llamar varias veces una función usando repeat(), como se ve en el metodo
+ * main siguiente
  * */
 
 fun main() {
-//    val coins: (Int) -> String = {
-//        "$it quarters"
-//    }
-
-    val cupcake: (Int) -> String = {
-//        quantity -> "have a cupcake!"
-        "have a cupcake!"
-    }
-
-//    val treatFunction = trickOrTreat(false, { "$it quarters" } )
     val treatFunction = trickOrTreat(false) { "$it quarters" }
     val trickFunction = trickOrTreat(true, null)
-    treatFunction()
+    repeat(5) {
+        treatFunction()
+    }
     trickFunction()
 }
 
@@ -47,6 +36,55 @@ val trick = {
 val treat: () -> Unit = {
     println("have a treat!")
 }
+
+///*
+// * Ejemplo sobre el uso de funciones y lambdas, curso de ANDROID BASICS WITH COMPOSE
+// * ya que la función coins sólo se usa una vez, es posible pasar la expresion directamente
+// * en el sitio de uso
+// *     val treatFunction = trickOrTreat(false, { "$it quarters" } )
+// * en vez de enviar la función por variable se envia el contenido de la misma
+// * hay otra forma válida para escribir lo mismo, es el trailing lambda syntax,
+// * permite escribir la lambda fuera del parentesis al ser la lambda el último parametro
+// * de la función, de esta forma
+// *     val treatFunction = trickOrTreat(false) { "$it quarters" }
+// * el resultado es el mismo
+// * */
+//
+//fun main() {
+////    val coins: (Int) -> String = {
+////        "$it quarters"
+////    }
+//
+//    val cupcake: (Int) -> String = {
+////        quantity -> "have a cupcake!"
+//        "have a cupcake!"
+//    }
+//
+////    val treatFunction = trickOrTreat(false, { "$it quarters" } )
+//    val treatFunction = trickOrTreat(false) { "$it quarters" }
+//    val trickFunction = trickOrTreat(true, null)
+//    treatFunction()
+//    trickFunction()
+//}
+//
+//fun trickOrTreat(isTrick: Boolean, extraTreat: ((Int) -> String)?): () -> Unit {
+//    return if (isTrick) {
+//        trick
+//    } else {
+//        if (extraTreat != null) {
+//            println(extraTreat(5))
+//        }
+//        treat
+//    }
+//}
+//
+//val trick = {
+//    println("no treats!")
+//}
+//
+//val treat: () -> Unit = {
+//    println("have a treat!")
+//}
 
 ///*
 // * Ejemplo sobre el uso de funciones y lambdas, curso de ANDROID BASICS WITH COMPOSE
