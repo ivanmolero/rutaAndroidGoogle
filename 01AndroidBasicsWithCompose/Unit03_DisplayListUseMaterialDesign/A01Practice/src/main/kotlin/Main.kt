@@ -52,7 +52,7 @@ fun main(args: Array<String>) {
 //        "long"
 //    }
     println("Duration of first event of the day: ${events[0].durationOfEvent}")
-    
+
 }
 
 val Event.durationOfEvent: String
